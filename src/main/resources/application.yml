@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: rpg-shop
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: none
+    datasource:
+        rpgshop:
+            driver-class-name: org.postgresql.Driver
+            username: postgres
+            password: postgres
