@@ -1,5 +1,7 @@
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   datasource:
     rpgshop:
       url: jdbc:postgresql://rpg_shop_db:5432/rpg_shop_db

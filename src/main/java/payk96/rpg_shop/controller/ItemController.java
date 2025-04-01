@@ -1,8 +1,8 @@
-package com.payk96.rpg_shop.controller;
+package payk96.rpg_shop.controller;
 
-import com.payk96.rpg_shop.dto.ItemRequest;
-import com.payk96.rpg_shop.dto.ItemResponse;
-import com.payk96.rpg_shop.service.ItemService;
+import payk96.rpg_shop.dto.ItemRequest;
+import payk96.rpg_shop.dto.ItemResponse;
+import payk96.rpg_shop.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService service;
 
-    @PostMapping
+    @PostMapping("/items")
     @ResponseStatus(HttpStatus.CREATED)
     public ItemResponse createItem(@RequestBody @Valid ItemRequest request) {
         return service.createItem(request);

@@ -1,5 +1,7 @@
 spring:
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
   datasource:
     rpgshop:
       url: jdbc:postgresql://localhost:5432/rpg_shop_db

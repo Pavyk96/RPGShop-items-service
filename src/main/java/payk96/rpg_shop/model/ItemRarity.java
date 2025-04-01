@@ -1,4 +1,4 @@
-package com.payk96.rpg_shop.model;
+package payk96.rpg_shop.model;
 
 public enum ItemRarity {
     COMMON, UNCOMMON, RARE, EPIC, LEGENDARY

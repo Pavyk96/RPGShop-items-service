@@ -1,4 +1,4 @@
-package com.payk96.rpg_shop.model;
+package payk96.rpg_shop.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
