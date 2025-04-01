@@ -1,7 +1,7 @@
-package com.payk96.rpg_shop.service;
+package payk96.rpg_shop.service;
 
-import com.payk96.rpg_shop.dto.ItemRequest;
-import com.payk96.rpg_shop.dto.ItemResponse;
+import payk96.rpg_shop.dto.ItemRequest;
+import payk96.rpg_shop.dto.ItemResponse;
 
 import java.util.List;
 

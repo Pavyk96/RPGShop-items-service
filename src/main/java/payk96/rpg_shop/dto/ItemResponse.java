@@ -1,8 +1,8 @@
-package com.payk96.rpg_shop.dto;
+package payk96.rpg_shop.dto;
 
-import com.payk96.rpg_shop.model.Item;
-import com.payk96.rpg_shop.model.ItemRarity;
-import com.payk96.rpg_shop.model.ItemType;
+import payk96.rpg_shop.model.Item;
+import payk96.rpg_shop.model.ItemRarity;
+import payk96.rpg_shop.model.ItemType;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ public class ItemResponse {
     private String description;
     private Map<String, Integer> stats;
 
-    private static ItemResponse toResponse(Item item) {
+    public static ItemResponse toResponse(Item item) {
         return ItemResponse.builder()
                 .id(item.getId())
                 .name(item.getName())
