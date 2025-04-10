@@ -1,6 +1,42 @@
 version: '3.9'
 
 services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=keycloakSQL
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8484:8080"
+    command: start-dev
+    depends_on:
+      - keycloakSQL
+    restart: unless-stopped
+    networks:
+      - my_network
+
+  keycloakSQL:
+    container_name: keycloakSQL
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=keycloak
+    ports:
+      - "5433:5432"
+    volumes:
+      - keycloak_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - my_network
+
+
   rpg_shop_db:
     container_name: rpg_shop_db
     image: postgres:16
@@ -16,15 +52,15 @@ services:
     networks:
       - my_network
 
-  backend:
-    image: payk96/rpgshop:0.0.1
-    container_name: backend
+  items-service:
+    image: payk96/items-service:0.0.1
+    container_name: items-service
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     depends_on:
-      - postgresSQL
+      - rpg_shop_db
     restart: unless-stopped
     networks:
       - my_network
@@ -32,6 +68,7 @@ services:
 
 volumes:
   postgres_data:
+  keycloak_data:
 
 networks:
   my_network:
