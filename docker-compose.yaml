@@ -36,7 +36,6 @@ services:
     networks:
       - my_network
 
-
   rpg_shop_db:
     container_name: rpg_shop_db
     image: postgres:16
@@ -53,7 +52,7 @@ services:
       - my_network
 
   items-service:
-    image: payk96/items-service:0.0.1
+    image: payk96/rgp-shop-items-service:0.0.1
     container_name: items-service
     ports:
       - "8080:8080"
@@ -64,6 +63,64 @@ services:
     restart: unless-stopped
     networks:
       - my_network
+
+  auth-service:
+    image: payk96/rgp-shop-auth-service:0.0.1
+    container_name: auth-service
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+    networks:
+      - my_network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - my_network
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z localhost 2181 || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_INTERNAL://0.0.0.0:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server kafka:29092 --list || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 
 
 volumes:
