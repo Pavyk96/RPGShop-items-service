@@ -5,3 +5,5 @@ spring:
   datasource:
     rpgshop:
       url: jdbc:postgresql://localhost:5432/rpg_shop_db
+  kafka:
+    bootstrap-servers: localhost:9092

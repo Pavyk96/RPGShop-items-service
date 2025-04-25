@@ -31,7 +31,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - keycloak_data:/var/lib/postgresql/data
+      - "/home/daniil/Desktop/keycloak_data:/var/lib/postgresql/data"
     restart: unless-stopped
     networks:
       - my_network
@@ -46,13 +46,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - "/home/daniil/Desktop/postgres_data:/var/lib/postgresql/data"
     restart: unless-stopped
     networks:
       - my_network
 
   items-service:
-    image: payk96/rgp-shop-items-service:0.0.1
+    image: payk96/rpg-shop-items-service:0.0.2
     container_name: items-service
     ports:
       - "8080:8080"
