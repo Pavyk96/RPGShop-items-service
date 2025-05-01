@@ -7,3 +7,10 @@ spring:
       url: jdbc:postgresql://localhost:5432/rpg_shop_db
   kafka:
     bootstrap-servers: localhost:9092
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/rpg-shop
