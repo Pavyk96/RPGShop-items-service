@@ -20,3 +20,13 @@ spring:
 kafka:
     topic:
         order-created: order.created.events
+
+server:
+    port: 8080
+
+logging:
+    level:
+        org.springframework.security: DEBUG
+        org.springframework.security.oauth2: DEBUG
+        org.springframework.security.web.authentication: DEBUG
+        org.springframework.security.web.access: DEBUG
