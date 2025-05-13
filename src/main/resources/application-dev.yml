@@ -13,4 +13,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/rpg-shop
+          issuer-uri: http://localhost:8484/realms/rpg-shop
