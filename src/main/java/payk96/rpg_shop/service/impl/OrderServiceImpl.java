@@ -1,11 +1,13 @@
 package payk96.rpg_shop.service.impl;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import payk96.rpg_shop.dto.OrderRequest;
 import payk96.rpg_shop.dto.OrderResponse;
 import payk96.rpg_shop.exception.IllegalOrderStatusException;
 import payk96.rpg_shop.exception.OrderNotFoundException;
 import payk96.rpg_shop.kafka.KafkaOrderEventProducer;
+import payk96.rpg_shop.metrics.OrderMetrics;
 import payk96.rpg_shop.model.Order;
 import payk96.rpg_shop.model.OrderStatus;
 import payk96.rpg_shop.repository.OrderRepository;
@@ -26,12 +28,15 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final KafkaOrderEventProducer kafkaProducer;
     private final ItemService itemService;
+    private final OrderMetrics orderMetrics;
+
 
     @Override
     public List<OrderResponse> getAll() {
         return orderRepository.findAll().stream().map(OrderResponse::toResponse).toList();
     }
 
+    @Timed(value = "orders.create.time", description = "Время выполнения создания заказа")
     @Override
     @Transactional
     public OrderResponse createOrder(OrderRequest request) {
@@ -43,13 +48,15 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
+        orderMetrics.recordItems(request.itemIds());
+        orderMetrics.recordBasketSize(request.itemIds().size());
         try {
             kafkaProducer.sendOrderCreatedEvent(savedOrder);
         } catch (Exception e) {
             log.error("Failed to send order created event", e);
         }
 
-        return mapToResponse(savedOrder);
+        return OrderResponse.toResponse(savedOrder);
     }
 
     @Override
@@ -57,14 +64,14 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
-        return mapToResponse(order);
+        return OrderResponse.toResponse(order);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<OrderResponse> getOrdersByCustomer(String customerId) {
         return orderRepository.findByCustomerId(customerId).stream()
-                .map(this::mapToResponse)
+                .map(OrderResponse::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -80,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.setItemIds(newItemIds);
         Order updatedOrder = orderRepository.save(order);
-        return mapToResponse(updatedOrder);
+        return OrderResponse.toResponse(updatedOrder);
     }
 
     @Override
@@ -93,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(newStatus);
         Order updatedOrder = orderRepository.save(order);
-        return mapToResponse(updatedOrder);
+        return OrderResponse.toResponse(updatedOrder);
     }
 
     @Override
@@ -113,15 +120,6 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
     }
 
-    private OrderResponse mapToResponse(Order order) {
-        return new OrderResponse(
-                order.getId(),
-                order.getCustomerId(),
-                order.getItemIds(),
-                order.getCreatedAt(),
-                order.getStatus()
-        );
-    }
 
     private void validateStatusTransition(OrderStatus currentStatus, OrderStatus newStatus) {
         if (currentStatus == OrderStatus.CANCELLED || currentStatus == OrderStatus.COMPLETED) {
