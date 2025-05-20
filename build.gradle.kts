@@ -24,15 +24,15 @@ repositories {
 }
 
 dependencies {
-	// Spring Security
+	//спринг секьюрити
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	// JWT (Java JWT)
+	//жвт токены
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
-	// Validation
+	//валидация
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -42,14 +42,21 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+	//метрики
 	implementation("io.micrometer:micrometer-core")
-	implementation("io.micrometer:micrometer-registry-prometheus") // или другой backend
+	implementation("io.micrometer:micrometer-registry-prometheus")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
 
+	//микросервисная архитекрутра
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("com.fasterxml.jackson.core:jackson-databind")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+	//кеширование
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("com.fasterxml.jackson.core:jackson-databind")
+
 
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.postgresql:postgresql:42.6.0")

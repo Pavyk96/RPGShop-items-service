@@ -1,6 +1,8 @@
 package payk96.rpg_shop.service.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import payk96.rpg_shop.dto.ItemRequest;
 import payk96.rpg_shop.dto.ItemResponse;
 import payk96.rpg_shop.exception.ItemNotFoundException;
@@ -27,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
         return ItemResponse.toResponse(repo.save(item));
     }
 
+    @CacheEvict(value = "itemById", key = "#id")
     @Override
     public ItemResponse updateItemById(long id, ItemRequest request) {
         Item existingItem = repo.findById(id)
@@ -45,6 +48,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "itemById", key = "#id")
     @Override
     public ItemResponse getById(long id) {
         return repo.findById(id)
@@ -52,6 +56,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new ItemNotFoundException("Item not found with id: " + id));
     }
 
+    @CacheEvict(value = "itemById", key = "#id")
     @Override
     public void deleteById(long id) {
         if (!repo.existsById(id)) {
