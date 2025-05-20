@@ -73,11 +73,11 @@ services:
       - my_network
 
   items-service:
-    image: payk96/rpg-shop-items-service:0.0.4
+    image: payk96/rpg-shop-items-service:0.0.5
     container_name: items-service
     ports:
       - "8083:8080"
-    environment:
+    environment:  
       - SPRING_PROFILES_ACTIVE=prod
     depends_on:
       - rpg_shop_db
