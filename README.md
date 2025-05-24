@@ -30,3 +30,29 @@
 
 P.S Так же я использовал АПИ Keycloak, библиотеку для отправки уведомлений на почту, контейнеризацию для развертывания
 
+
+
+
+
+
+# ЗАПУСК ПРИЛОЖЕНИЯ #
+
+1) Скачайте докер-композ файл из текущего репозитория
+2) Запустите контейнер keycloak
+3) Перейдите по http://localhost:8484/admin/master/console/#/rpg-shop/realms, для входа используйте логин: admin и пароль: admin
+4) Скачайте настройку реалма по этой ссылке: https://drive.google.com/file/d/1Sk2CzSljQGUqXmlv3Xv_o8N4LtzIRuZW/view?usp=sharing
+5) Импортируйте реалм:
+![image](https://github.com/user-attachments/assets/64549649-0064-4747-bb9e-27c25f8eef50)
+6) После импорта реалма, вы должны в докер-композе вставить свои KEYCLOAK_CLIENT_SECRET и KEYCLOAK_PUBLIC_KEY, в микросерсиве аутентификации (auth-service)
+7) На данных скринах вы можете увидеть где найти эти значения:
+Секрет клиента:
+![image](https://github.com/user-attachments/assets/3407dd1b-8eff-40c1-b411-96b0cf059863)
+![image](https://github.com/user-attachments/assets/46bb8d63-f617-49ce-862a-1a8a8fa27f4f)
+Публиный ключ:
+![image](https://github.com/user-attachments/assets/50f89481-16e7-4c8b-a02c-0d9471cfabe8)
+8) Замените KEYCLOAK_CLIENT_SECRET и KEYCLOAK_PUBLIC_KEY на полученные значения.
+9) Запустите докер композ полностью
+
+
+
+
