@@ -1,8 +1,6 @@
 version: '3.9'
 
 services:
-
-
   api-gateway:
     image: payk96/rpg-shop-api-gateway:0.0.3
     container_name: api-gateway
@@ -20,7 +18,6 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
-
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -92,8 +89,8 @@ services:
       - "8081:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - KEYCLOAK_CLIENT_SECRET=3i9MjnwSECMQowksDN2zSxnhSAjJ4MQI
-      - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApE8E3hGkCLgX+Z3TukQyH6mE11oCl/nGAbQOVhG8K4fmB6JFT8W2StV6GhHYnezOOQgaRVzTkleneIINPR4Q2d2MC9idGNP6SsumXH7rHsETpZZ+cpV9Zl3E1q5lNEXf5zn/hEs+S0bzNg9zeYhDyESxnJdY9BSX8c0CWKbdq9DutSdDoiIRW95NLTiAvx6yZFbpACQQMot1/XPpAjtJajasG9PEiII7ZP7BzGQxR6zsQugDwiIntVQXhYTBQJJUP6sefEzABaYdMM1vEoDQ+agr4+BpcNTobAHmK300aNRgD8hTWOxlv2VXJXm0psum7IhupGyGIwD7XKWf0OD9JQIDAQAB
+      - KEYCLOAK_CLIENT_SECRET=yK2VAzpMEO90HyRAAskDG1l4GNibtk8e
+      - KEYCLOAK_PUBLIC_KEY=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvXBdt7t2nhGWZ80QMPPoRs3JpVskqB2YuFcbBVn4Nz3vimyUwxQDaRyxEzTjdX4kUGKDrINU67bmAkc4sRt5QHhnIjxpNfhUdFrY00NMwe7DbtI2tN4rncAoZwOBmMBFVwTNuGZBQSnakYliSbMPNOCgOrqDN3REQ8LIK0L7mxVa58Vdys2coph05w3lfIz74MksMm0de6gn7AeyQbNHrmHjsYcexjdCO81aXfWftYJJtFFN5fA2iG/Fpt7Eiz42XbUWxZNsAmgdcd17+PVcfcAYo6MAPzUfepL+Xdx5/zj9ZWKto3GutL6fO4sg+cywTc5f0prlTQr7MZD3qVfFrQIDAQAB
     depends_on:
       - keycloak
     restart: unless-stopped
@@ -129,7 +126,6 @@ services:
       timeout: 5s
       retries: 3
 
-
   kafka:
     image: confluentinc/cp-kafka:7.4.0
     container_name: kafka
@@ -156,8 +152,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-
-
 
 volumes:
   postgres_data:
